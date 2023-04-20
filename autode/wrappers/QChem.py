@@ -516,6 +516,12 @@ class QChem(autode.wrappers.methods.ExternalMethodOEGH):
             if not isinstance(calc.input.keywords, kws.SinglePointKeywords):
                 self.write("symmetry False")
                 self.write("sym_ignore True")
+                
+            # Q-Chem defines the total memory for the whole calculation, not
+            # per core
+            
+            total_mem = int(Config.max_core.to("MB") * calc.n_cores)
+            self.write(f"mem_total {total_mem}")
 
             self.write("$end\n")
 
